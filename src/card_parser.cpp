@@ -16,12 +16,20 @@ card card_parser::parse(std::istream &stream)
 
     json_parser::read_json(stream, properties);
 
+    std::string colors, color_identity;
+
+    for(const ptree::value_type &color : properties.get_child("colors"))
+      colors += "{" + color.second.data() + "}";
+
+    for(const ptree::value_type &color : properties.get_child("color_identity"))
+      color_identity += "{" + color.second.data() + "}";
+
     return card(properties.get<std::string>("name"),
                 properties.get<std::string>("mana_cost"),
                 properties.get<std::string>("type_line"),
                 properties.get<std::string>("oracle_text"),
-                properties.get<std::string>("colors"),
-                properties.get<std::string>("color_identity"));
+                colors,
+                color_identity);
   }
   catch(const json_parser_error &ex)
   {
