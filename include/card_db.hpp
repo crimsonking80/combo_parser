@@ -7,7 +7,7 @@
 class card_db
 {
 public:
-  explicit card_db(const std::string &url = "https://api.scryfall.com");
+  explicit card_db(const std::string &url = "");
 
   card &operator [](const std::string &name);
 
