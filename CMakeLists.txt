@@ -5,6 +5,9 @@ project(combo_parser)
 set(ZLIB_ROOT "ext/zlib")
 find_package(ZLIB REQUIRED)
 
+set(OPENSSL_ROOT_DIR "ext/openssl")
+find_package(OpenSSL REQUIRED)
+
 add_definitions(-DCURL_STATICLIB)
 find_package(CURL REQUIRED PATHS "ext")
 
