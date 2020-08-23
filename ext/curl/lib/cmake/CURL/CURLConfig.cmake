@@ -46,8 +46,8 @@ endmacro()
 ####################################################################################
 
 include(CMakeFindDependencyMacro)
-if()
-  find_dependency(OpenSSL )
+if(ON)
+  find_dependency(OpenSSL 1)
 endif()
 if(ON)
   find_dependency(ZLIB 1)

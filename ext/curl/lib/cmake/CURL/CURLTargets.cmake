@@ -56,7 +56,7 @@ add_library(CURL::libcurl STATIC IMPORTED)
 set_target_properties(CURL::libcurl PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS "CURL_STATICLIB"
   INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "wldap32;winmm;ws2_32;advapi32;ZLIB::ZLIB"
+  INTERFACE_LINK_LIBRARIES "wldap32;winmm;ws2_32;advapi32;OpenSSL::SSL;OpenSSL::Crypto;ZLIB::ZLIB;D:/local/libssh2/lib/libssh2.lib;crypt32"
 )
 
 # Create imported target CURL::curl
