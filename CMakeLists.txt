@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.12.4)
 
 project(combo_parser)
 
+find_package(Boost REQUIRED)
+
 set(ZLIB_ROOT "ext/zlib")
 find_package(ZLIB REQUIRED)
 
@@ -24,7 +26,7 @@ set_target_properties(${PROJECT_NAME}_cli PROPERTIES RUNTIME_OUTPUT_DIRECTORY "b
 
 target_include_directories(${PROJECT_NAME} PUBLIC include PRIVATE src)
 
-target_link_libraries(${PROJECT_NAME} CURL::libcurl)
+target_link_libraries(${PROJECT_NAME} Boost::headers CURL::libcurl)
 target_link_libraries(${PROJECT_NAME}_cli ${PROJECT_NAME})
 
 add_custom_command(TARGET ${PROJECT_NAME}_cli POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${DLLS} "bin/$<CONFIG>")

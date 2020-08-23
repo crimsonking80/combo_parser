@@ -1,14 +1,12 @@
-#include "combo_parser.hpp"
-
-#include <iostream>
-#include <sstream>
+#include "card_db.hpp"
 
 int main(int argc, char **argv)
 {
-  std::istringstream in("1997,Ford,\"\",\"Ford\",\"Super, luxurious truck\",\"Super, \"\"luxurious\"\" truck\",Super\", luxurious\" truck");
-  std::ostringstream out;
+  card_db db;
 
-  parse(in, std::cout);
+  //client.get("https://sheets.googleapis.com/v4/spreadsheets/1JJo8MzkpuhfvsaKVFVlOoNymscCt-Aw-1sob2IhpwXY/values:batchGet?ranges=combos!A2:R&key=AIzaSyDzQ0jCf3teHnUK17ubaLaV6rcWf9ZjG5E");
+
+  const card card = db["Ad Nauseam"];
 
   return 0;
 }
