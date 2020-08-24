@@ -3,11 +3,11 @@
 #include <iostream>
 #include <string>
 
-class data_provider
+class DataProvider
 {
 public:
-  data_provider();
-  ~data_provider();
+  DataProvider();
+  ~DataProvider();
 
   std::string escape(const std::string &url) const;
 

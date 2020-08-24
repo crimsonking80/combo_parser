@@ -2,10 +2,10 @@
 
 #include <string>
 
-class card
+class Card
 {
 public:
-  explicit card(const std::string &name = "",
+  explicit Card(const std::string &name = "",
                 const std::string &mana_cost = "",
                 const std::string &type_line = "",
                 const std::string &oracle_text = "",

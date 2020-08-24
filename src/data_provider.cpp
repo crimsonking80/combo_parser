@@ -2,7 +2,7 @@
 
 #include <curl/curl.h>
 
-data_provider::data_provider()
+DataProvider::DataProvider()
 {
   static class curl_init
   {
@@ -16,12 +16,12 @@ data_provider::data_provider()
     std::cerr << "curl_easy_init() failed." << std::endl;
 }
 
-data_provider::~data_provider()
+DataProvider::~DataProvider()
 {
   curl_easy_cleanup(handle);
 }
 
-std::string data_provider::escape(const std::string &url) const
+std::string DataProvider::escape(const std::string &url) const
 {
   std::string result;
 
@@ -58,7 +58,7 @@ static size_t callback(void *buffer, size_t size, size_t count, void *ptr)
   return result;
 }
 
-bool data_provider::get(const std::string &url, std::ostream &out)
+bool DataProvider::get(const std::string &url, std::ostream &out)
 {
   if(!handle)
     return false;

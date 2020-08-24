@@ -1,13 +1,12 @@
-#include "json_parser.hpp"
+#include "card_parser.hpp"
 
 #include <iostream>
 
 #include <boost/property_tree/json_parser.hpp>
 
 #include "card.hpp"
-#include "combo.hpp"
 
-card json_parser::parse_card(std::istream &stream)
+Card CardParser::parse(std::istream &stream)
 {
   try
   {
@@ -23,7 +22,7 @@ card json_parser::parse_card(std::istream &stream)
     for(const boost::property_tree::ptree::value_type &color : properties.get_child("color_identity"))
       color_identity += "{" + color.second.data() + "}";
 
-    return card(properties.get<std::string>("name"),
+    return Card(properties.get<std::string>("name"),
                 properties.get<std::string>("mana_cost"),
                 properties.get<std::string>("type_line"),
                 properties.get<std::string>("oracle_text"),
@@ -33,35 +32,35 @@ card json_parser::parse_card(std::istream &stream)
   catch(const boost::property_tree::json_parser_error &ex)
   {
     std::cerr << "boost::property_tree::json_parser::read_json() failed: " << ex.what() << std::endl;
-    return card();
+    return Card();
   }
   catch(const boost::property_tree::ptree_error &ex)
   {
     std::cerr << "boost::property_tree::ptree::get() failed: " << ex.what() << std::endl;
-    return card();
+    return Card();
   }
 }
 
-combo json_parser::parse_combo(std::istream &stream)
-{
-  try
-  {
-    boost::property_tree::ptree properties;
-
-    boost::property_tree::json_parser::read_json(stream, properties);
-
-    // TODO
-
-    return combo();
-  }
-  catch(const boost::property_tree::json_parser_error &ex)
-  {
-    std::cerr << "boost::property_tree::json_parser::read_json() failed: " << ex.what() << std::endl;
-    return combo();
-  }
-  catch(const boost::property_tree::ptree_error &ex)
-  {
-    std::cerr << "boost::property_tree::ptree::get() failed: " << ex.what() << std::endl;
-    return combo();
-  }
-}
+//combo json_parser::parse_combo(std::istream &stream)
+//{
+//  try
+//  {
+//    boost::property_tree::ptree properties;
+//
+//    boost::property_tree::json_parser::read_json(stream, properties);
+//
+//    // TODO
+//
+//    return combo();
+//  }
+//  catch(const boost::property_tree::json_parser_error &ex)
+//  {
+//    std::cerr << "boost::property_tree::json_parser::read_json() failed: " << ex.what() << std::endl;
+//    return combo();
+//  }
+//  catch(const boost::property_tree::ptree_error &ex)
+//  {
+//    std::cerr << "boost::property_tree::ptree::get() failed: " << ex.what() << std::endl;
+//    return combo();
+//  }
+//}

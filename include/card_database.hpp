@@ -4,17 +4,17 @@
 
 #include "card.hpp"
 
-class card_db
+class CardDatabase
 {
 public:
-  explicit card_db(const std::string &url = "");
+  explicit CardDatabase(const std::string &url = "");
 
-  card &operator [](const std::string &name);
+  Card &operator [](const std::string &name);
 
   std::string url() const { return url_; }
 
 protected:
-  typedef std::map<std::string, card> map_t;
+  typedef std::map<std::string, Card> map_t;
 
 private:
   std::string url_;
