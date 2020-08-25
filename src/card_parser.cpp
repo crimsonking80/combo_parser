@@ -6,20 +6,22 @@
 
 #include "card.hpp"
 
+using namespace boost::property_tree;
+
 Card CardParser::parse(std::istream &stream)
 {
   try
   {
-    boost::property_tree::ptree properties;
+    ptree properties;
 
-    boost::property_tree::json_parser::read_json(stream, properties);
+    json_parser::read_json(stream, properties);
 
     std::string colors, color_identity;
 
-    for(const boost::property_tree::ptree::value_type &color : properties.get_child("colors"))
+    for(const ptree::value_type &color : properties.get_child("colors"))
       colors += "{" + color.second.data() + "}";
 
-    for(const boost::property_tree::ptree::value_type &color : properties.get_child("color_identity"))
+    for(const ptree::value_type &color : properties.get_child("color_identity"))
       color_identity += "{" + color.second.data() + "}";
 
     return Card(properties.get<std::string>("name"),
@@ -29,38 +31,9 @@ Card CardParser::parse(std::istream &stream)
                 colors,
                 color_identity);
   }
-  catch(const boost::property_tree::json_parser_error &ex)
+  catch(const ptree_error &ex)
   {
-    std::cerr << "boost::property_tree::json_parser::read_json() failed: " << ex.what() << std::endl;
-    return Card();
-  }
-  catch(const boost::property_tree::ptree_error &ex)
-  {
-    std::cerr << "boost::property_tree::ptree::get() failed: " << ex.what() << std::endl;
+    std::cerr << "error while parsing card: " << ex.what() << "." << std::endl;
     return Card();
   }
 }
-
-//combo json_parser::parse_combo(std::istream &stream)
-//{
-//  try
-//  {
-//    boost::property_tree::ptree properties;
-//
-//    boost::property_tree::json_parser::read_json(stream, properties);
-//
-//    // TODO
-//
-//    return combo();
-//  }
-//  catch(const boost::property_tree::json_parser_error &ex)
-//  {
-//    std::cerr << "boost::property_tree::json_parser::read_json() failed: " << ex.what() << std::endl;
-//    return combo();
-//  }
-//  catch(const boost::property_tree::ptree_error &ex)
-//  {
-//    std::cerr << "boost::property_tree::ptree::get() failed: " << ex.what() << std::endl;
-//    return combo();
-//  }
-//}

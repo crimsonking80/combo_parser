@@ -4,44 +4,76 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#include "card_database.hpp"
 #include "combo.hpp"
 
-void ComboSerializer::serialize(std::ostream &stream, const std::vector<Combo> &combos)
+using namespace boost::property_tree;
+
+bool ComboSerializer::serialize(std::ostream &stream, const std::vector<Combo> &combos)
 {
   // TODO
+
+  return false;
 }
 
-void ComboSerializer::deserialize(std::istream &stream, std::vector<Combo> &combos)
+bool ComboSerializer::deserialize(std::istream &stream, std::vector<Combo> &combos)
 {
   try
   {
-    boost::property_tree::ptree properties;
+    ptree properties;
 
-    boost::property_tree::json_parser::read_json(stream, properties);
+    json_parser::read_json(stream, properties);
 
-    for(const boost::property_tree::ptree::value_type &range : properties.get_child("valueRanges"))
+    const ptree &ranges = properties.get_child("valueRanges");
+
+    for(ptree::const_iterator range_it = ranges.begin(); range_it != ranges.end(); ++range_it)
     {
-      for(const boost::property_tree::ptree::value_type &value : properties.get_child("values"))
+      const ptree &values = range_it->second.get_child("values");
+
+      for(ptree::const_iterator value_it = values.begin(); value_it != values.end(); ++value_it)
       {
         try
         {
-          // TODO
+          ptree::const_iterator it = value_it->second.begin();
 
-          combos.push_back(Combo());
+          const std::string id = (it++)->second.data();
+
+          for(size_t i = 0; i < 10; ++i)
+          {
+            const std::string name = (it++)->second.data();
+            if(name.empty())
+              continue;
+
+            const Card card = database_[name];
+            if(card.empty())
+              throw std::exception(("card " + name + " not found").c_str());
+
+            // TODO
+          }
+
+          const std::string color_identity = (it++)->second.data();
+          const std::string prerequisites = (it++)->second.data();
+          const std::string steps = (it++)->second.data();
+          const std::string results = (it++)->second.data();
+          const std::string reserved1 = (it++)->second.data();
+          const std::string reserved2 = (it++)->second.data();
+          const std::string cards = (it++)->second.data();
+
+          combos.push_back(Combo(cards, results, prerequisites, steps));
         }
-        catch(const boost::property_tree::ptree_error &ex)
+        catch(const std::exception &ex)
         {
-          std::cerr << "boost::property_tree::ptree::get() failed: " << ex.what() << std::endl;
+          std::cerr << "error while parsing combo: " << ex.what() << "." << std::endl;
         }
       }
     }
+
+    return true;
   }
-  catch(const boost::property_tree::json_parser_error &ex)
+  catch(const ptree_error &ex)
   {
-    std::cerr << "boost::property_tree::json_parser::read_json() failed: " << ex.what() << std::endl;
-  }
-  catch(const boost::property_tree::ptree_error &ex)
-  {
-    std::cerr << "boost::property_tree::ptree::get_child() failed: " << ex.what() << std::endl;
+    std::cerr << "error while parsing combos: " << ex.what() << "." << std::endl;
+
+    return false;
   }
 }

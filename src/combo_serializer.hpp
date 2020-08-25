@@ -4,11 +4,17 @@
 #include <ostream>
 #include <vector>
 
+class CardDatabase;
 class Combo;
 
 class ComboSerializer
 {
 public:
-  void serialize(std::ostream &stream, const std::vector<Combo> &combos);
-  void deserialize(std::istream &stream, std::vector<Combo> &combos);
+  explicit ComboSerializer(CardDatabase &database) : database_(database) {}
+
+  bool serialize(std::ostream &stream, const std::vector<Combo> &combos);
+  bool deserialize(std::istream &stream, std::vector<Combo> &combos);
+
+private:
+  CardDatabase &database_;
 };

@@ -1,10 +1,10 @@
 #include <fstream>
 
-#include "data_provider.hpp"
-
 #include <boost/program_options.hpp>
 
 #include "card_database.hpp"
+#include "combo_database.hpp"
+#include "data_provider.hpp"
 
 int main(int argc, char **argv)
 {
@@ -12,15 +12,16 @@ int main(int argc, char **argv)
 
   std::string file;
 
-  bool download;
+  bool download, parse;
 
   boost::program_options::options_description desc("options:");
 
   desc.add_options()
     ("help", "display help")
     ("url", boost::program_options::value<std::string>(), "combo spreadsheets url")
-    ("file", boost::program_options::value<std::string>(&file)->default_value("combos.json"), "combo spreadsheets url")
-    ("download", boost::program_options::value<bool>(&download)->default_value(true), "combo spreadsheets url");
+    ("file", boost::program_options::value<std::string>(&file)->default_value("combos.json"), "downloaded filename")
+    ("download", boost::program_options::value<bool>(&download)->default_value(true), "perform download")
+    ("parse", boost::program_options::value<bool>(&parse)->default_value(true), "perform parse");
 
   boost::program_options::variables_map args;
 
@@ -44,6 +45,15 @@ int main(int argc, char **argv)
 
     if(!provider.get(url, stream))
       return -1;
+  }
+
+  if(parse)
+  {
+    std::fstream stream(file, std::fstream::in);
+
+    CardDatabase card_db;
+
+    ComboDatabase combo_db(card_db, stream);
   }
 
   return 0;

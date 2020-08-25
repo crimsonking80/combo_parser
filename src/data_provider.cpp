@@ -13,7 +13,7 @@ DataProvider::DataProvider()
 
   handle = curl_easy_init();
   if(!handle)
-    std::cerr << "curl_easy_init() failed." << std::endl;
+    std::cerr << "error while initializing data provider." << std::endl;
 }
 
 DataProvider::~DataProvider()
@@ -50,7 +50,7 @@ static size_t callback(void *buffer, size_t size, size_t count, void *ptr)
 
     if(!stream->write(reinterpret_cast<const char *>(buffer), result))
     {
-      std::cerr << "std::ostream::write() failed." << std::endl;
+      std::cerr << "error while writing data." << std::endl;
       return 0;
     }
   }
@@ -73,7 +73,7 @@ bool DataProvider::get(const std::string &url, std::ostream &out)
   const CURLcode code = curl_easy_perform(handle);
   if(code != CURLE_OK)
   {
-    std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(code) << "." << std::endl;
+    std::cerr << "error while downloading data from " << url << ": " << curl_easy_strerror(code) << "." << std::endl;
     return false;
   }
 
