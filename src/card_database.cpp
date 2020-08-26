@@ -1,5 +1,6 @@
 #include "card_database.hpp"
 
+#include <fstream>
 #include <sstream>
 
 #include <boost/property_tree/json_parser.hpp>
@@ -39,6 +40,15 @@ Card &CardDatabase::operator [](const std::string &name)
   return it->second;
 }
 
+bool CardDatabase::write(const std::string &filename)
+{
+  std::fstream stream(filename, std::fstream::out);
+  if(!stream.is_open())
+    return false;
+
+  return write(stream);
+}
+
 bool CardDatabase::write(std::ostream &stream)
 {
   try
@@ -73,6 +83,15 @@ bool CardDatabase::write(std::ostream &stream)
 
     return false;
   }
+}
+
+bool CardDatabase::read(const std::string &filename)
+{
+  std::fstream stream(filename, std::fstream::in);
+  if(!stream.is_open())
+    return false;
+
+  return read(stream);
 }
 
 bool CardDatabase::read(std::istream &stream)

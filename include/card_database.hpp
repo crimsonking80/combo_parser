@@ -1,6 +1,5 @@
 #pragma once
 
-#include <istream>
 #include <map>
 
 #include "card.hpp"
@@ -14,7 +13,10 @@ public:
 
   std::string url() const { return url_; }
 
+  bool write(const std::string &filename);
   bool write(std::ostream &stream);
+
+  bool read(const std::string &filename);
   bool read(std::istream &stream);
 
 protected:

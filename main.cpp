@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 {
   std::string url = "https://sheets.googleapis.com/v4/spreadsheets/1JJo8MzkpuhfvsaKVFVlOoNymscCt-Aw-1sob2IhpwXY/values:batchGet?ranges=combos!A2:R&key=AIzaSyDzQ0jCf3teHnUK17ubaLaV6rcWf9ZjG5E";
 
-  std::string file;
+  std::string file, card_file;
 
   bool download, parse;
 
@@ -19,7 +19,8 @@ int main(int argc, char **argv)
   desc.add_options()
     ("help", "display help")
     ("url", boost::program_options::value<std::string>(), "combo spreadsheets url")
-    ("file", boost::program_options::value<std::string>(&file)->default_value("combos.json"), "downloaded filename")
+    ("file", boost::program_options::value<std::string>(&file)->default_value("combos.json"), "downloaded combos filename")
+    ("card_file", boost::program_options::value<std::string>(&card_file)->default_value("cards.json"), "card database filename")
     ("download", boost::program_options::value<bool>(&download)->default_value(true), "perform download")
     ("parse", boost::program_options::value<bool>(&parse)->default_value(true), "perform parse");
 
@@ -37,6 +38,10 @@ int main(int argc, char **argv)
   if(args.count("url"))
     url = args["url"].as<std::string>();
 
+  CardDatabase card_db;
+
+  card_db.read(card_file);
+
   if(download)
   {
     std::fstream stream(file, std::fstream::out);
@@ -51,10 +56,10 @@ int main(int argc, char **argv)
   {
     std::fstream stream(file, std::fstream::in);
 
-    CardDatabase card_db;
-
     ComboDatabase combo_db(card_db, stream);
   }
+
+  card_db.write(card_file);
 
   return 0;
 }
