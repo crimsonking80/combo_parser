@@ -20,6 +20,8 @@ bool ComboSerializer::deserialize(std::istream &stream, std::vector<Combo> &comb
 {
   try
   {
+    std::cout << "parsing combos..." << std::endl;
+
     ptree properties;
 
     json_parser::read_json(stream, properties);
@@ -63,10 +65,12 @@ bool ComboSerializer::deserialize(std::istream &stream, std::vector<Combo> &comb
         }
         catch(const std::exception &ex)
         {
-          std::cerr << "error while parsing combo: " << ex.what() << "." << std::endl;
+          std::cerr << "error while parsing a combo: " << ex.what() << "." << std::endl;
         }
       }
     }
+
+    std::cout << "combos successfully parsed." << std::endl;
 
     return true;
   }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <istream>
 #include <map>
 
 #include "card.hpp"
@@ -12,6 +13,9 @@ public:
   Card &operator [](const std::string &name);
 
   std::string url() const { return url_; }
+
+  bool write(std::ostream &stream);
+  bool read(std::istream &stream);
 
 protected:
   typedef std::map<std::string, Card> map_t;

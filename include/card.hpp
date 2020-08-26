@@ -1,5 +1,6 @@
 #pragma once
 
+#include <istream>
 #include <string>
 
 class Card
@@ -27,6 +28,8 @@ public:
   std::string color_identity() const { return color_identity_; }
 
   bool empty() const { return name_.empty(); }
+
+  bool parse(std::istream &stream);
 
 private:
   std::string name_, mana_cost_, type_line_, oracle_text_, colors_, color_identity_;

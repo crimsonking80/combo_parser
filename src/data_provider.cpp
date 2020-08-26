@@ -50,7 +50,7 @@ static size_t callback(void *buffer, size_t size, size_t count, void *ptr)
 
     if(!stream->write(reinterpret_cast<const char *>(buffer), result))
     {
-      std::cerr << "error while writing data." << std::endl;
+      std::cerr << "error while writing downloaded data." << std::endl;
       return 0;
     }
   }
