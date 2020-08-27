@@ -17,15 +17,28 @@ bool Card::parse(std::istream &stream)
     name_ = properties.get<std::string>("name");
     mana_cost_ = properties.get<std::string>("mana_cost");
     type_line_ = properties.get<std::string>("type_line");
-    oracle_text_ = properties.get<std::string>("oracle_text");
+    oracle_text_ = properties.get<std::string>("oracle_text", "");
 
-    colors_.clear();
+    if(properties.count("card_faces"))
+    {
+      for(const ptree::value_type &face : properties.get_child("card_faces"))
+      {
+        if(!oracle_text_.empty())
+          oracle_text_ += "\n";
+
+        oracle_text_ += face.second.get<std::string>("oracle_text", "");
+      }
+    }
+
+    std::string colors;
     for(const ptree::value_type &color : properties.get_child("colors"))
-      colors_ += "{" + color.second.data() + "}";
+      colors += color.second.data();
+    colors_ = colors;
 
-    color_identity_.clear();
+    std::string color_identity;
     for(const ptree::value_type &color : properties.get_child("color_identity"))
-      color_identity_ += "{" + color.second.data() + "}";
+      color_identity += color.second.data();
+    color_identity_ = color_identity;
 
     return true;
   }

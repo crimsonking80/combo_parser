@@ -5,6 +5,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include "card_database.hpp"
+#include "color.hpp"
 #include "combo.hpp"
 
 using namespace boost::property_tree;
@@ -40,17 +41,19 @@ bool ComboSerializer::deserialize(std::istream &stream, std::vector<Combo> &comb
 
           const std::string id = (it++)->second.data();
 
+          std::vector< std::shared_ptr<Card> > cards;
+
           for(size_t i = 0; i < 10; ++i)
           {
             const std::string name = (it++)->second.data();
             if(name.empty())
               continue;
 
-            const Card card = database_[name];
-            if(card.empty())
-              throw std::exception(("card " + name + " not found").c_str());
+            const std::shared_ptr<Card> card = database_[name];
+            if(!card)
+              throw std::exception(("card \"" + name + "\" not found").c_str());
 
-            // TODO
+            cards.push_back(card);
           }
 
           const std::string color_identity = (it++)->second.data();
@@ -59,9 +62,14 @@ bool ComboSerializer::deserialize(std::istream &stream, std::vector<Combo> &comb
           const std::string results = (it++)->second.data();
           const std::string reserved1 = (it++)->second.data();
           const std::string reserved2 = (it++)->second.data();
-          const std::string cards = (it++)->second.data();
+          const std::string cards2 = (it++)->second.data();
 
-          combos.push_back(Combo(cards, results, prerequisites, steps));
+          const Combo combo(cards, results, prerequisites, steps);
+
+          if(combo.color_identity() != color_identity)
+            std::cout << "color identity " << color_identity << " corrected to " << combo.color_identity() << "." << std::endl;
+
+          combos.push_back(combo);
         }
         catch(const std::exception &ex)
         {

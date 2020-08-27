@@ -2,13 +2,11 @@
 
 #include <cctype>
 
-namespace
-{
 struct data_t
 {
-  char value = 0;
+  char value;
 
-  bool (*parse)(data_t *data, char ch) = 0;
+  bool (*parse)(data_t *data, char ch);
 };
 
 bool parse(data_t *data, char ch)
@@ -20,6 +18,9 @@ bool parse(data_t *data, char ch)
   {
   case '{':
     data->parse = parse_open_braces;
+    return true;
+
+  case ',':
     return true;
 
   default:
@@ -93,7 +94,6 @@ bool parse_close_braces(data_t *data, char ch)
     return std::isspace(ch) != 0;
   }
 }
-}
 
 Color::Color(const std::string &desc) : value_(0)
 {
@@ -101,8 +101,11 @@ Color::Color(const std::string &desc) : value_(0)
 
   data_t data;
 
+  data.value = 0;
+  data.parse = parse;
+
   for(std::string::const_iterator it = desc.begin(); result && it != desc.end(); ++it)
-    result = parse(&data, *it);
+    result = data.parse(&data, *it);
 
   if(result)
     value_ = data.value;

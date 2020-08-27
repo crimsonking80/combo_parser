@@ -1,6 +1,13 @@
 #include "combo.hpp"
 
-std::string Combo::color_identity() const
+#include "card.hpp"
+
+Color Combo::color_identity() const
 {
-  return "";
+  Color color;
+
+  for(cards_t::const_iterator it = cards_.begin(); it != cards_.end(); ++it)
+    color += (*it)->color_identity();
+
+  return color;
 }

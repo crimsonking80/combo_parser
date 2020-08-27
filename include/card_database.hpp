@@ -1,17 +1,18 @@
 #pragma once
 
 #include <map>
+#include <memory>
 
-#include "card.hpp"
+class Card;
 
 class CardDatabase
 {
 public:
   explicit CardDatabase(const std::string &url = "");
 
-  Card &operator [](const std::string &name);
-
   std::string url() const { return url_; }
+
+  std::shared_ptr<Card> operator [](const std::string &name);
 
   bool write(const std::string &filename);
   bool write(std::ostream &stream);
@@ -20,7 +21,7 @@ public:
   bool read(std::istream &stream);
 
 protected:
-  typedef std::map<std::string, Card> map_t;
+  typedef std::map< std::string, std::shared_ptr<Card> > map_t;
 
 private:
   std::string url_;

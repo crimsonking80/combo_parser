@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "color.hpp"
 
 class Card
 {
@@ -23,13 +23,14 @@ public:
   std::string mana_cost() const { return mana_cost_; }
   std::string type_line() const { return type_line_; }
   std::string oracle_text() const { return oracle_text_; }
-  std::string colors() const { return colors_; }
-  std::string color_identity() const { return color_identity_; }
+  Color colors() const { return colors_; }
+  Color color_identity() const { return color_identity_; }
 
   bool empty() const { return name_.empty(); }
 
   bool parse(std::istream &stream);
 
 private:
-  std::string name_, mana_cost_, type_line_, oracle_text_, colors_, color_identity_;
+  std::string name_, mana_cost_, type_line_, oracle_text_;
+  Color colors_, color_identity_;
 };

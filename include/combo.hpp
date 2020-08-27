@@ -1,11 +1,19 @@
 #pragma once
 
+#include <memory>
 #include <string>
+#include <vector>
+
+class Card;
+class Color;
 
 class Combo
 {
+protected:
+  typedef std::vector< std::shared_ptr<Card> > cards_t;
+
 public:
-  explicit Combo(const std::string &cards = "",
+  explicit Combo(const cards_t &cards,
                  const std::string &results = "",
                  const std::string &prerequisites = "",
                  const std::string &steps = "") :
@@ -15,13 +23,15 @@ public:
     steps_(steps)
   {}
 
-  std::string cards() const { return cards_; }
+  cards_t cards() const { return cards_; }
   std::string results() const { return results_; }
   std::string prerequisites() const { return prerequisites_; }
   std::string steps() const { return steps_; }
 
-  std::string color_identity() const;
+  Color color_identity() const;
 
 private:
-  std::string cards_, results_, prerequisites_, steps_;
+  cards_t cards_;
+
+  std::string results_, prerequisites_, steps_;
 };
