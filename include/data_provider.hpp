@@ -6,13 +6,13 @@
 class DataProvider
 {
 public:
-  DataProvider();
-  ~DataProvider();
+	DataProvider();
+	~DataProvider();
 
-  std::string escape(const std::string &url) const;
+	std::string escape(const std::string &url) const;
 
-  bool get(const std::string &url, std::ostream &out = std::cout);
+	bool get(const std::string &url, std::ostream &out = std::cout);
 
 protected:
-  void *handle;
+	void *handle;
 };

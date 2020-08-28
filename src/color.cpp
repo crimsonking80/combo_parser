@@ -106,55 +106,55 @@ private:
 
 Color::Color(const std::string &text) : value_(0)
 {
-  bool result = true;
+	bool result = true;
 
-  ColorParser parser;
+	ColorParser parser;
 
-  for(std::string::const_iterator it = text.begin(); result && it != text.end(); ++it)
-    result = parser.parse(*it);
+	for(std::string::const_iterator it = text.begin(); result && it != text.end(); ++it)
+		result = parser.parse(*it);
 
-  if(result)
-    value_ = parser.value();
+	if(result)
+		value_ = parser.value();
 }
 
 Color::operator std::string() const
 {
-  if(desc_.empty())
-  {
-    if(value_ == 0)
-      desc_ = "{C}";
-    else
-    {
-      if(value_ & 1)
-        desc_ += "{W}";
+	if(desc_.empty())
+	{
+		if(value_ == 0)
+			desc_ = "{C}";
+		else
+		{
+			if(value_ & 1)
+				desc_ += "{W}";
 
-      if(value_ & 2)
-        desc_ += "{U}";
+			if(value_ & 2)
+				desc_ += "{U}";
 
-      if(value_ & 4)
-        desc_ += "{B}";
+			if(value_ & 4)
+				desc_ += "{B}";
 
-      if(value_ & 8)
-        desc_ += "{R}";
+			if(value_ & 8)
+				desc_ += "{R}";
 
-      if(value_ & 16)
-        desc_ += "{G}";
-    }
-  }
+			if(value_ & 16)
+				desc_ += "{G}";
+		}
+	}
 
-  return desc_;
+	return desc_;
 }
 
 Color operator +(const Color &a, const Color &b)
 {
-  Color c = a;
-  c += a;
-  return c;
+	Color c = a;
+	c += a;
+	return c;
 }
 
 Color operator -(const Color &a, const Color &b)
 {
-  Color c = a;
-  c -= a;
-  return c;
+	Color c = a;
+	c -= a;
+	return c;
 }

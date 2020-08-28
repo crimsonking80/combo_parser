@@ -4,12 +4,12 @@
 
 bool ComboDatabase::fetch(std::istream &stream)
 {
-  std::vector<Combo> combos;
+	std::vector<Combo> combos;
 
-  if(!ComboSerializer(database_).deserialize(stream, combos))
-    return false;
+	if(!ComboSerializer(database_).deserialize(stream, combos))
+		return false;
 
-  // TODO
+	// TODO
 
-  return true;
+	return true;
 }

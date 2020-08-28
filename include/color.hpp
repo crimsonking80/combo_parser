@@ -5,22 +5,22 @@
 class Color
 {
 public:
-  Color(char value = 0) : value_(value & 0x1f) {}
-  Color(const std::string &text);
+	Color(char value = 0) : value_(value & 0x1f) {}
+	Color(const std::string &text);
 
-  Color &operator +=(const Color &color) { value_ |= color.value_; return *this; }
-  Color &operator -=(const Color &color) { value_ &= ~color.value_; return *this; }
+	Color &operator +=(const Color &color) { value_ |= color.value_; return *this; }
+	Color &operator -=(const Color &color) { value_ &= ~color.value_; return *this; }
 
-  bool operator ==(const Color &color) const { return value_ == color.value_; }
-  bool operator <=(const Color &color) const { return (value_ & color.value_) == value_; }
+	bool operator ==(const Color &color) const { return value_ == color.value_; }
+	bool operator <=(const Color &color) const { return (value_ & color.value_) == value_; }
 
-  operator char() const { return value_; }
-  operator std::string() const;
+	operator char() const { return value_; }
+	operator std::string() const;
 
 private:
-  char value_;
+	char value_;
 
-  mutable std::string desc_;
+	mutable std::string desc_;
 };
 
 Color operator +(const Color &a, const Color &b);

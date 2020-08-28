@@ -10,11 +10,11 @@ class Combo;
 class ComboSerializer
 {
 public:
-  explicit ComboSerializer(CardDatabase &database) : database_(database) {}
+	explicit ComboSerializer(CardDatabase &database) : database_(database) {}
 
-  bool serialize(std::ostream &stream, const std::vector<Combo> &combos);
-  bool deserialize(std::istream &stream, std::vector<Combo> &combos);
+	bool serialize(std::ostream &stream, const std::vector<Combo> &combos);
+	bool deserialize(std::istream &stream, std::vector<Combo> &combos);
 
 private:
-  CardDatabase &database_;
+	CardDatabase &database_;
 };
