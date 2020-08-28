@@ -2,113 +2,119 @@
 
 #include <cctype>
 
-struct data_t
+class ColorParser
 {
-  char value;
+public:
+	ColorParser() :
+		parse_(&ColorParser::parse_init),
+		value_(0)
+	{}
 
-  bool (*parse)(data_t *data, char ch);
+	bool parse(char ch) { return (this->*parse_)(ch); }
+
+	char value() const { return value_; }
+
+protected:
+	typedef bool (ColorParser::*parse_f)(char);
+
+	bool parse_init(char ch)
+	{
+		switch(ch)
+		{
+		case '{':
+			parse_ = &ColorParser::parse_open_braces;
+			return true;
+
+		case ',':
+			return true;
+
+		default:
+			return parse_color(ch);
+		}
+	}
+
+	bool parse_color(char ch)
+	{
+		switch(ch)
+		{
+		case 'W':
+		case 'w':
+			value_ |= 0x01;
+			return true;
+
+		case 'U':
+		case 'u':
+			value_ |= 0x02;
+			return true;
+
+		case 'B':
+		case 'b':
+			value_ |= 0x04;
+			return true;
+
+		case 'R':
+		case 'r':
+			value_ |= 0x08;
+			return true;
+
+		case 'G':
+		case 'g':
+			value_ |= 0x10;
+			return true;
+
+		case 'C':
+		case 'c':
+			return true;
+
+		default:
+			return std::isspace(ch) != 0;
+		}
+	}
+
+	bool parse_open_braces(char ch)
+	{
+		if(std::isspace(ch != 0))
+			return true;
+
+		if(parse_color(ch))
+		{
+			parse_ = &ColorParser::parse_close_braces;
+			return true;
+		}
+
+		return false;
+	}
+
+	bool parse_close_braces(char ch)
+	{
+		switch(ch)
+		{
+		case '}':
+			parse_ = &ColorParser::parse_init;
+			return true;
+
+		default:
+			return std::isspace(ch) != 0;
+		}
+	}
+
+private:
+	parse_f parse_;
+
+	char value_;
 };
 
-bool parse(data_t *data, char ch)
-{
-  bool parse_color(data_t *, char);
-  bool parse_open_braces(data_t *, char);
-
-  switch(ch)
-  {
-  case '{':
-    data->parse = parse_open_braces;
-    return true;
-
-  case ',':
-    return true;
-
-  default:
-    return parse_color(data, ch);
-  }
-}
-
-bool parse_color(data_t *data, char ch)
-{
-  switch(ch)
-  {
-  case 'W':
-  case 'w':
-    data->value |= 0x01;
-    return true;
-
-  case 'U':
-  case 'u':
-    data->value |= 0x02;
-    return true;
-
-  case 'B':
-  case 'b':
-    data->value |= 0x04;
-    return true;
-
-  case 'R':
-  case 'r':
-    data->value |= 0x08;
-    return true;
-
-  case 'G':
-  case 'g':
-    data->value |= 0x10;
-    return true;
-
-  case 'C':
-  case 'c':
-    return true;
-
-  default:
-    return std::isspace(ch) != 0;
-  }
-}
-
-bool parse_open_braces(data_t *data, char ch)
-{
-  bool parse_close_braces(data_t *, char);
-
-  if(std::isspace(ch != 0))
-    return true;
-
-  if(parse_color(data, ch))
-  {
-    data->parse = parse_close_braces;
-    return true;
-  }
-
-  return false;
-}
-
-bool parse_close_braces(data_t *data, char ch)
-{
-  switch(ch)
-  {
-  case '}':
-    data->parse = parse;
-    return true;
-
-  default:
-    return std::isspace(ch) != 0;
-  }
-}
-
-Color::Color(const std::string &desc) : value_(0)
+Color::Color(const std::string &text) : value_(0)
 {
   bool result = true;
 
-  data_t data;
+  ColorParser parser;
 
-  data.value = 0;
-  data.parse = parse;
-
-  for(std::string::const_iterator it = desc.begin(); result && it != desc.end(); ++it)
-    result = data.parse(&data, *it);
+  for(std::string::const_iterator it = text.begin(); result && it != text.end(); ++it)
+    result = parser.parse(*it);
 
   if(result)
-    value_ = data.value;
+    value_ = parser.value();
 }
 
 Color::operator std::string() const

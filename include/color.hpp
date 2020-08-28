@@ -6,7 +6,7 @@ class Color
 {
 public:
   Color(char value = 0) : value_(value & 0x1f) {}
-  Color(const std::string &desc);
+  Color(const std::string &text);
 
   Color &operator +=(const Color &color) { value_ |= color.value_; return *this; }
   Color &operator -=(const Color &color) { value_ &= ~color.value_; return *this; }
