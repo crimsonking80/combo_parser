@@ -38,9 +38,10 @@ std::shared_ptr<Card> CardDatabase::operator [](const std::string &name)
 		return std::shared_ptr<Card>();
 	}
 
+	map_.insert(it, std::make_pair(name, card));
 	map_.insert(it, std::make_pair(card->name(), card));
 
-	std::cout << "card \"" << card->name() << "\" added to database." << std::endl;
+	std::cout << "card \"" << name << "\" added to database." << std::endl;
 
 	return card;
 }
